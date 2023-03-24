@@ -1,5 +1,5 @@
 <template>
-    <div class="card col">
+    <div class="card col gap-3 p-3">
         <div>
             <b>Chain:</b>
             <div
@@ -19,13 +19,13 @@
         <div>
             <b>Token metadata:</b>
             <div
-                :class="tokenMetadata.isLoaded ? '' : 'fakeBlock fakeBlock_big'"
+                :class="tokenMetadata.isLoaded ? 'col gap-1' : 'fakeBlock fakeBlock_big'"
             >
                 {
                 <div
                     v-for="(item, index) in Object.keys(tokenMetadata.value)"
                     :key="index"
-                    class="row json-row"
+                    class="row gap-3 json-row"
                 >
                     <div>"{{ item }}":</div>
                     <div v-if="item === 'name'">
@@ -106,11 +106,11 @@ export default {
                 }
             })
         },
-        isLink(str) {
+        isLink(value) {
             // Выносим в отдельный метод. По-хорошему, можно и в отдельный файл вынести,
             // может использоваться и в других местах
             // .indexOf() работает быстрее, чем регулярки
-            return str.indexOf('https://') === 0 || str.indexOf('http://') === 0
+            return value.indexOf('https://') === 0 || value.indexOf('http://') === 0
         },
         isInWhitelist(name) {
             for(let i = 0; i < TOKENS_WHITELIST.length; i++) {
@@ -131,40 +131,6 @@ export default {
     width: 600px;
     border-radius: 5px;
     padding: 15px;
-}
-
-@keyframes effect-wave {
-    0% {
-        background-position: 50% 50%;
-    }
-
-    100% {
-        background-position: -150% 50%;
-    }
-}
-
-.fakeBlock {
-    overflow: hidden;
-    animation: effect-wave 1s infinite;
-    background-color: #ddd;
-    background-image:
-      linear-gradient(
-        90deg,
-        #777 0%,
-        #777 20%,
-        #666 30%,
-        #666 70%,
-        #555 80%,
-        #555 100%
-      );
-    background-position: 50% 50%;
-    background-size: 200% 100%;
-    border-radius: 3px;
-    color: transparent;
-    user-select: none;
-    white-space: nowrap;
-    min-width: 100px;
-    min-height: 19px;
 }
 
 .fakeBlock_big {

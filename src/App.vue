@@ -1,55 +1,58 @@
 <template>
     <div id="app">
-        <TokenCard :id="10"/>
+        <TabsSwitcher
+            :tabs="tabs"
+            :current-tab="currentTab"
+            @tabChange="changeTab($event)"
+        />
+        <TokenCard
+            v-if="currentTab === 'token'"
+            :id="10"
+        />
+        <BlocksTable
+            v-else-if="currentTab === 'table'"
+        />
+        <div v-else>Wrong tab</div>
     </div>
 </template>
 
 <script>
-import TokenCard from './components/TokenCard.vue'
+import TabsSwitcher from '@/components/TabsSwitcher.vue'
+import TokenCard from '@/components/TokenCard.vue'
+import BlocksTable from '@/components/BlocksTable.vue'
 
 export default {
     name: 'App',
     components: {
-        TokenCard
+        TabsSwitcher,
+        TokenCard,
+        BlocksTable,
+    },
+    data() {
+        return {
+            tabs: [
+                {
+                    name: 'table',
+                    title: 'Table',
+                },
+                {
+                    name: 'token',
+                    title: 'Token',
+                }
+            ],
+            currentTab: 'table',
+        }
+    },
+    methods: {
+        changeTab(tab) {
+            this.currentTab = tab
+        },
     }
 }
 </script>
 
 <style>
-body {
-    background-color: #222;
-}
 
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #fff;
-    margin-top: 60px;
-}
 
-a, a:visited {
-    color: #98D3F7;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-.row {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    align-items: center;
-}
-
-.col {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.text-green {
-    color: #63BF77;
-}
 </style>
+
