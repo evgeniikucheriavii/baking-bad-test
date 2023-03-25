@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getBlocks } from '@/assets/tzktApi'
+import { getBlocks, getBlocksCount } from '@/assets/tzktApi'
 
 export default {
     name: 'BlocksTable',
@@ -82,6 +82,7 @@ export default {
             limit: 20,
             data: [],
             fetchingData: false,
+            lastBlocksCount: 0,
         }
     },
     watch: {
@@ -101,12 +102,25 @@ export default {
     methods: {
         fetchData() {
             this.fetchingData = true
-            getBlocks(this.offset, this.limit, this.sort).then((response) => {
-                this.data = [
-                    ...this.data,
-                    ...response.data
-                ]
-                this.fetchingData = false
+
+            getBlocksCount().then((response) => {
+                // тут мы проверяем актуальное количество блоков
+                // Если оно больше последнего сохранённого - увеличиваем offset, чтобы не дублировать строки
+                const newBlocksCount = response.data
+                const blocksCountDelta = newBlocksCount - this.lastBlocksCount
+
+                if (this.lastBlocksCount !== 0) {
+                    this.offset += blocksCountDelta
+                }
+                this.lastBlocksCount = newBlocksCount
+
+                getBlocks(this.offset, this.limit, this.sort).then((response) => {
+                    this.data = [
+                        ...this.data,
+                        ...response.data
+                    ]
+                    this.fetchingData = false
+                })
             })
         },
         onScroll() {
@@ -121,7 +135,6 @@ export default {
 
             if (delta < scrollSpacing) {
                 this.offset += this.limit
-                this.fetchingData = true
 
                 // Добавил задержку для демонстрации
                 setTimeout(() => {
@@ -155,5 +168,4 @@ export default {
 .table-col {
     overflow: hidden;
 }
-
 </style>
