@@ -13,7 +13,7 @@
                         v-if="col.sortable"
                         :class="[
                             'fa-solid',
-                            sort === col.name ? 'fa-sort-up' : sort === `-${col.name}` ? 'fa-sort-down' : 'fa-sort text-gray'
+                            sort === col.name ? 'fa-sort-down' : 'fa-sort text-gray'
                         ]"
                         @click="onSortClick(col.name)"
                     ></i>
@@ -40,6 +40,25 @@
                 </div>
             </div>
         </div>
+        <div
+            v-if="fetchingData"
+            class="table-body col gap-2"
+        >
+            <div
+                v-for="(row, rIndex) in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
+                :key="`fake_row_${rIndex}`"
+                class="row gap-3"
+            >
+                <div
+                    v-for="(col, cIndex) in columns"
+                    :key="`row_${rIndex}_col_${cIndex}`"
+                    class="row table-col p-3 gap-3 align-items-center"
+                    :style="{'width': `${col.width}px`}"
+                >
+                    <div class="fake-block" :style="{'width': '100%'}"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -58,7 +77,7 @@ export default {
                 { name: 'reward', title: 'Reward', sortable: true, width: 100 },
                 { name: 'fees', title: 'Fees', sortable: true, width: 100 },
             ],
-            sort: '-id',
+            sort: 'id',
             offset: 0,
             limit: 20,
             data: [],
@@ -67,6 +86,8 @@ export default {
     },
     watch: {
         sort() {
+            this.offset = 0
+            this.data = []
             this.fetchData()
         }
     },
@@ -89,8 +110,9 @@ export default {
             })
         },
         onScroll() {
-            // const top = this.$refs.refContainer.getBoundingClientRect().top
-            // const elementPosition = top - this.spacing
+            if (this.fetchingData) {
+                return
+            }
             const pageHeight = document.body.scrollHeight
             const scrollBottom = window.scrollY + window.innerHeight
 
@@ -99,17 +121,17 @@ export default {
 
             if (delta < scrollSpacing) {
                 this.offset += this.limit
-                this.fetchData()
+                this.fetchingData = true
+
+                // Добавил задержку для демонстрации
+                setTimeout(() => {
+                    this.fetchData()
+                }, 1000)
             }
         },
         onSortClick(value) {
-            if (this.sort === `-${value}`) {
-                this.sort = '-id'
-                return
-            }
-
             if (this.sort === value) {
-                this.sort = `-${value}`
+                this.sort = 'id'
                 return
             }
 

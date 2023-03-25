@@ -126,7 +126,7 @@ a:hover {
     }
 }
 
-.fakeBlock {
+.fake-block {
     overflow: hidden;
     animation: effect-wave 1s infinite;
     background-color: #ddd;

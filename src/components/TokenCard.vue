@@ -3,7 +3,7 @@
         <div>
             <b>Chain:</b>
             <div
-                :class="chain.isLoaded ? '' : 'fakeBlock'"
+                :class="chain.isLoaded ? '' : 'fake-block'"
             >{{ chain.value }}</div>
         </div>
         <div>
@@ -13,13 +13,13 @@
         <div>
             <b>Token contract:</b>
             <div
-                :class="tokenInfo.isLoaded ? '' : 'fakeBlock'"
+                :class="tokenInfo.isLoaded ? '' : 'fake-block'"
             >{{ tokenInfo.value.contract }}</div>
         </div>
         <div>
             <b>Token metadata:</b>
             <div
-                :class="tokenMetadata.isLoaded ? 'col gap-1' : 'fakeBlock fakeBlock_big'"
+                :class="tokenMetadata.isLoaded ? 'col gap-1' : 'fake-block fake-block_big'"
             >
                 {
                 <div
@@ -133,7 +133,7 @@ export default {
     padding: 15px;
 }
 
-.fakeBlock_big {
+.fake-block_big {
     height: 125px;
 }
 
