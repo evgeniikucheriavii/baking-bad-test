@@ -85,6 +85,9 @@ export default {
     },
     methods: {
         fetchData() {
+            // Я сделал три независимых запроса, потому что данные это позволяют
+            // Можно запускать последовательно
+            // Можно проверять, что пришли все данные перед выводом
             getChain().then((response) => {
                 this.chain = {
                     value: response,
@@ -124,9 +127,7 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .card {
     width: 600px;
     border-radius: 5px;

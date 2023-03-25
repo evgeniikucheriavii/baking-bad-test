@@ -37,12 +37,15 @@ export default defineComponent({
             default: 1234, // Может совпасть с реальным ID, лучше поставить 0 или -1
         },
     },
+    // Всё в одном методе, не очень весело
     setup(props) {
         const chain = ref('Mainnet');
         const tokenInfo = ref(null);
         const tokenMetadata = ref(null);
+        // Вынести бы из метода
         const whitelisted = ['XTZ', 'TZBTC', 'USDT', 'USDC', 'USDS', 'KUSD', 'WBTC', 'WETH'];
 
+        // Лучше эту логику реализовать в template. Тогда же можно обойтись и без v-html
         const processMetadata = (metadata) => {
             let json = JSON.stringify(metadata, null, '\t');
             for (const name of whitelisted) {
@@ -58,6 +61,7 @@ export default defineComponent({
         };
         
         onMounted(async () => {
+            // await лишние, так как данные у нас независимы друг от друга
             tokenMetadata.value = processMetadata(await getTokenMetadata());
             tokenInfo.value = await getTokenInfo(props.id);
             chain.value = await getChain();
@@ -79,7 +83,7 @@ div {
     padding: 1rem !important;
 }
 
-/* Опять же */
+/* Опять же + наследование */
 div > div {
     padding: 0 !important;
 }
